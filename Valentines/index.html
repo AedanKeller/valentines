@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be my Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffc3d5 0%, #ffb3c6 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #f5f0e8;
+            border-radius: 30px;
+            padding: 60px 80px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+
+        .cat {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .cat-face {
+            width: 100%;
+            height: 100%;
+            background: #f5a977;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .cat-ear-left {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 40px solid #f5a977;
+            position: absolute;
+            top: -25px;
+            left: 15px;
+        }
+
+        .cat-ear-right {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 40px solid #f5a977;
+            position: absolute;
+            top: -25px;
+            right: 15px;
+        }
+
+        .cat-bow {
+            width: 30px;
+            height: 30px;
+            background: #ff4d7d;
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
+        }
+
+        .cat-bow::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #ff4d7d;
+            position: absolute;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(90deg);
+            left: -15px;
+        }
+
+        .cat-eyes {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .eye {
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .cat-nose {
+            width: 10px;
+            height: 8px;
+            background: #ff8ba8;
+            border-radius: 0 0 50% 50%;
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 30px 0;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 40px;
+            position: relative;
+            height: 80px;
+        }
+
+        button {
+            padding: 18px 50px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #yesBtn {
+            background: #ff4d7d;
+            color: white;
+            transform: scale(1);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 77, 125, 0.4);
+        }
+
+        #noBtn {
+            background: #e0e0e0;
+            color: #666;
+            position: absolute;
+            right: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #noBtn:hover {
+            background: #d0d0d0;
+        }
+
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 195, 213, 0.95);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration h2 {
+            font-size: 48px;
+            color: #ff4d7d;
+            margin-bottom: 30px;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        .gif-placeholder {
+            width: 400px;
+            height: 300px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 3s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cat">
+            <div class="cat-face">
+                <div class="cat-ear-left"></div>
+                <div class="cat-ear-right"></div>
+                <div class="cat-bow"></div>
+                <div class="cat-eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                </div>
+                <div class="cat-nose"></div>
+            </div>
+        </div>
+        <h1>Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <h2>Yay! ❤️</h2>
+        <iframe src="https://giphy.com/embed/3o7abldj0b3rxrZUxW" width="480" height="370" style="border-radius: 20px;" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const celebration = document.getElementById('celebration');
+        const container = document.querySelector('.container');
+        const hearts = document.getElementById('hearts');
+
+        let yesScale = 1;
+        let noAttempts = 0;
+
+        // Make "Yes" button grow when mouse is near
+        document.addEventListener('mousemove', (e) => {
+            const yesBtnRect = yesBtn.getBoundingClientRect();
+            const yesBtnCenterX = yesBtnRect.left + yesBtnRect.width / 2;
+            const yesBtnCenterY = yesBtnRect.top + yesBtnRect.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(e.clientX - yesBtnCenterX, 2) + 
+                Math.pow(e.clientY - yesBtnCenterY, 2)
+            );
+
+            if (distance < 150) {
+                const scale = 1 + (150 - distance) / 300;
+                yesBtn.style.transform = `scale(${scale})`;
+            } else {
+                yesBtn.style.transform = 'scale(1)';
+            }
+        });
+
+        // Make "No" button run away when mouse gets close
+        document.addEventListener('mousemove', (e) => {
+            if (noBtn.style.display === 'none') return;
+            
+            const noBtnRect = noBtn.getBoundingClientRect();
+            const noBtnCenterX = noBtnRect.left + noBtnRect.width / 2;
+            const noBtnCenterY = noBtnRect.top + noBtnRect.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(e.clientX - noBtnCenterX, 2) + 
+                Math.pow(e.clientY - noBtnCenterY, 2)
+            );
+
+            // React when mouse is within 100px
+            if (distance < 100) {
+                noAttempts++;
+                
+                // Calculate direction away from mouse
+                const angle = Math.atan2(noBtnCenterY - e.clientY, noBtnCenterX - e.clientX);
+                const moveDistance = 150;
+                
+                let newX = Math.cos(angle) * moveDistance;
+                let newY = Math.sin(angle) * moveDistance;
+                
+                // Add some randomness
+                newX += (Math.random() - 0.5) * 100;
+                newY += (Math.random() - 0.5) * 100;
+                
+                // Get current position
+                const currentTransform = noBtn.style.transform;
+                const existingTranslate = currentTransform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
+                
+                let currentX = 0;
+                let currentY = 0;
+                
+                if (existingTranslate) {
+                    currentX = parseFloat(existingTranslate[1]);
+                    currentY = parseFloat(existingTranslate[2]);
+                }
+                
+                let totalX = currentX + newX;
+                let totalY = currentY + newY;
+                
+                // Keep button on screen with better boundaries
+                const containerRect = container.getBoundingClientRect();
+                const maxX = (containerRect.width / 2) - 100;
+                const maxY = 150;
+                
+                totalX = Math.max(-maxX, Math.min(maxX, totalX));
+                totalY = Math.max(-maxY, Math.min(maxY, totalY));
+                
+                // Gradually shrink the button
+                let scale = 1;
+                if (noAttempts > 5) {
+                    scale = Math.max(0.4, 1 - (noAttempts - 5) * 0.08);
+                }
+                
+                noBtn.style.transform = `translate(${totalX}px, ${totalY}px) scale(${scale})`;
+                
+                // Hide after many attempts
+                if (noAttempts > 15) {
+                    noBtn.style.opacity = '0';
+                    setTimeout(() => {
+                        noBtn.style.display = 'none';
+                    }, 300);
+                }
+            }
+        });
+
+        // When Yes is clicked
+        yesBtn.addEventListener('click', () => {
+            celebration.classList.add('active');
+            createHearts();
+        });
+
+        // Create falling hearts
+        function createHearts() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = '❤️';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    hearts.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
